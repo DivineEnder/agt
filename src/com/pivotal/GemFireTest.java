@@ -25,16 +25,17 @@ public class GemFireTest {
     ClientCacheFactory ccf = new ClientCacheFactory();
     ccf.addPoolLocator("localhost", 10333);
     ccf.setPoolSubscriptionEnabled(true);
-    ccf.setPoolSubscriptionAckInterval(10);
+//    ccf.setPoolSubscriptionAckInterval(10);
+    System.setProperty("gemfire.statistic-archive-file", "client_stats.gfs");
     cache = ccf.create();
   }
 
   protected Region createClientRegion(String regionName, ClientRegionShortcut regionShortcut) {
-    return cache.createClientRegionFactory(regionShortcut).create(regionName);
+    return cache.createClientRegionFactory(regionShortcut).setStatisticsEnabled(true).create(regionName);
   }
 
   protected Region createClientRegion(String regionName, ClientRegionShortcut regionShortcut, CacheListener listener) {
-    return cache.createClientRegionFactory(regionShortcut).addCacheListener(listener).create(regionName);
+    return cache.createClientRegionFactory(regionShortcut).setStatisticsEnabled(true).addCacheListener(listener).create(regionName);
   }
 
   protected  void startLocator() throws Exception {
